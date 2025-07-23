@@ -4,7 +4,7 @@ export const brandConfig = {
     name: 'Calu Project',
     colors: {
         primary: '#0d9488',
-        secondary: '#ffffff',
+        secondary: '#674191',
         accent: '#22d3ee',
     },
 };

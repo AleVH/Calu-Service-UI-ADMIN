@@ -5,6 +5,8 @@ import { apiPost } from '@lib/api';
 
 export default function LoginPage() {
     const brand = useBrand();
+    const is_default_brand = brand.id === 'default';
+    const title = is_default_brand ? 'Admin Login' : `Admin Login - ${brand.name}`
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState<string | null>(null);
@@ -32,7 +34,7 @@ export default function LoginPage() {
             <div className="min-h-screen flex items-center justify-center bg-[--brand-bg] text-[--brand-text]">
                 <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-sm">
                     <form onSubmit={handleLogin} className="space-y-4">
-                        <h1 className="text-xl font-bold text-center">Admin Login</h1>
+                        <h1 className="text-xl font-bold text-center">{title}</h1>
 
                         <input
                             type="email"
