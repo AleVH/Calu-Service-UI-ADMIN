@@ -1,6 +1,5 @@
 import type { AppProps } from 'next/app';
 import '@styles/globals.css';
-console.log('@styles/globals.css');
 import { BrandProvider } from '@branding/BrandProvider';
 import { BrandStyleWrapper } from '@branding/BrandStyleWrapper';
 
