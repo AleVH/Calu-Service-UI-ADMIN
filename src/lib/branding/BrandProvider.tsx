@@ -15,7 +15,7 @@ export const BrandProvider = ({ children }: { children: React.ReactNode }) => {
                 const config = await loadBrandingConfig(brandId);
                 setBrandConfig(config);
             } catch (err) {
-                console.warn('Failed to load branding config, using default.');
+                console.error('Failed to load brand config:', err);
             }
         };
         init();

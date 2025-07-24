@@ -7,4 +7,11 @@ export const brandConfig = {
         secondary: '#674191',
         accent: '#22d3ee',
     },
+    lang: 'en',
+    logo: 'logo.svg',       // optional
+    favicon: 'favicon.ico', // optional
+    input: {
+        borderRadius: '0.375rem', // optional: like Tailwind's rounded-md
+        variant: 'outline',       // optional: for future input styling
+    },
 };
