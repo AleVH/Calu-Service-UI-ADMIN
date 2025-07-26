@@ -1,31 +1,44 @@
 // src/lib/auth/withAuthProtection.tsx
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
-import type { ComponentType, ReactElement } from 'react'
+import { useAuth } from './useAuth'
+import type { ComponentType } from 'react'
 
-// Create new scratch file from selection - NOTE: Replace this later with real auth logic
-const fakeUser = {
-    isLoggedIn: false, // flip this to false to simulate redirect
-    roles: ['admin'], // for future role-based access
-}
-
+// Read the dev bypass flag from environment variables
+// This must be prefixed with NEXT_PUBLIC_ to be available client-side
 const devBypassEnabled =
     process.env.NEXT_PUBLIC_DEV_LOGIN_BYPASS === 'true'
 
+// Higher-Order Component to wrap protected pages
+// Optionally accepts a list of roles required to access the page
 export function withAuthProtection<P extends object>(
-    Component: ComponentType<P>
+    Component: ComponentType<P>,
+    requiredRoles?: string[]
 ): ComponentType<P> {
-    return function Protected(props: P): ReactElement | null {
+    return function Protected(props: P) {
+        const { user, isLoggedIn } = useAuth()
         const router = useRouter()
 
+        // Check if user has at least one required role (if any are specified)
+        const hasAccess = requiredRoles
+            ? user?.roles.some((r) => requiredRoles.includes(r))
+            : true // if no roles are required, grant access by default
+
         useEffect(() => {
-            if (!fakeUser.isLoggedIn && !devBypassEnabled) {
+            // Redirect to login if not logged in and not in dev bypass mode
+            if (!isLoggedIn && !devBypassEnabled) {
                 router.replace('/login')
             }
-        }, [])
+            // Redirect to unauthorized page if user lacks access
+            else if (!hasAccess && !devBypassEnabled) {
+                router.replace('/unauthorized') // You can build this later
+            }
+        }, [isLoggedIn, hasAccess, router])
 
-        if (!fakeUser.isLoggedIn && !devBypassEnabled) return null
+        // If blocked, don't render anything until redirect finishes
+        if ((!isLoggedIn || !hasAccess) && !devBypassEnabled) return null
 
+        // If allowed, render the original page
         return <Component {...props} />
     }
 }

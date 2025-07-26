@@ -4,7 +4,7 @@
  * Makes a POST request to a relative API URL with JSON body.
  * Throws if response is not ok (non-2xx).
  */
-export async function apiPost<T = any>(
+export async function apiPost<T = unknown>(
     url: string,
     body: Record<string, unknown>
 ): Promise<T> {
